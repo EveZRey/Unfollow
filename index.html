@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram Unfollow Bot | By Eve Z Rey</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #833ab4;
+        --secondary: #fd1d1d;
+        --tertiary: #fcb045;
+        --bg-color: #0f172a;
+        --text-light: #f8fafc;
+        --text-muted: #94a3b8;
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-light);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        /* Fondo con gradiente sutil animado */
+        background-image:
+          radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+          radial-gradient(
+            at 50% 0%,
+            hsla(225, 39%, 30%, 0.3) 0,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 0%,
+            hsla(339, 49%, 30%, 0.3) 0,
+            transparent 50%
+          );
+      }
+
+      /* Contenedor Principal (Efecto Glassmorphism) */
+      .container {
+        max-width: 800px;
+        width: 90%;
+        margin: 4rem auto;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 3rem;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        animation: fadeIn 1s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        /* Texto con gradiente estilo Instagram */
+        background: linear-gradient(
+          45deg,
+          var(--tertiary),
+          var(--secondary),
+          var(--primary)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .header p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      /* Tarjetas de Características */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+
+      .feature-card {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .feature-card i {
+        font-size: 2rem;
+        color: var(--secondary);
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-card p {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+
+      /* Botón de Descarga */
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        color: white;
+        text-decoration: none;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 20px -10px var(--secondary);
+        border: none;
+        cursor: pointer;
+      }
+
+      .download-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 25px -10px var(--primary);
+      }
+
+      .download-btn i {
+        transition: transform 0.3s ease;
+      }
+
+      .download-btn:hover i {
+        transform: translateY(3px);
+      }
+
+      #toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #10b981;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        bottom: 30px;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #toast.show {
+        visibility: visible;
+        -webkit-animation:
+          fadein 0.5s,
+          fadeout 0.5s 2.5s;
+        animation:
+          fadein 0.5s,
+          fadeout 0.5s 2.5s;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--glass-border);
+        width: 100%;
+      }
+
+      .social-links {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .social-links a {
+        color: var(--text-light);
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+      }
+
+      .social-links a:hover {
+        color: var(--tertiary);
+      }
+
+      .disclaimer {
+        margin-top: 1.5rem;
+        font-size: 0.75rem;
+        opacity: 0.7;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .container {
+          padding: 2rem 1.5rem;
+        }
+        .header h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Instagram Unfollow Bot</h1>
+        <p>
+          Una herramienta de código abierto para automatizar la limpieza de tu
+          cuenta. Detecta quién no te sigue de vuelta y deja de seguirlos
+          automáticamente de forma segura y local.
+        </p>
+      </header>
+
+      <section class="features">
+        <div class="feature-card">
+          <i class="fa-solid fa-shield-halved"></i>
+          <h3>100% Local</h3>
+          <p>
+            No usamos servidores. Tus contraseñas y datos nunca salen de tu
+            computadora.
+          </p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-robot"></i>
+          <h3>Automatizado</h3>
+          <p>
+            Simula clics humanos para evitar baneos. Solo dale play y relájate.
+          </p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-bolt"></i>
+          <h3>Fácil de Usar</h3>
+          <p>
+            No necesitas saber programar. Ejecuta el archivo .bat y sigue las
+            instrucciones.
+          </p>
+        </div>
+      </section>
+
+      <a
+        href="Bot_Limpieza.zip"
+        download="Bot_Limpieza.zip"
+        class="download-btn"
+        onclick="showToast()"
+      >
+        <i class="fa-solid fa-download"></i> Descargar Bot v1.0
+      </a>
+    </div>
+
+    <div id="toast">
+      <i class="fa-solid fa-circle-check"></i> ¡Descarga iniciada! Lee el
+      README.md incluido.
+    </div>
+
+    <footer>
+      <p>Desarrollado con ❤️ por <strong>Eve Z Rey</strong></p>
+      <div class="social-links">
+        <a href="https://github.com/evezrey" target="_blank" title="GitHub"
+          ><i class="fa-brands fa-github"></i
+        ></a>
+        <a
+          href="https://instagram.com/cehort.gl"
+          target="_blank"
+          title="Instagram"
+          ><i class="fa-brands fa-instagram"></i
+        ></a>
+      </div>
+      <p class="disclaimer">
+        Descargo de Responsabilidad: Proyecto puramente experimental. El uso de
+        herramientas de automatización en plataformas de terceros está sujeto a
+        sus propios términos de servicio. El autor no se hace responsable de
+        suspensiones de cuentas. Úsalo bajo tu propio riesgo.
+      </p>
+    </footer>
+
+    <script>
+      function showToast() {
+        var toast = document.getElementById("toast");
+        toast.className = "show";
+
+        setTimeout(function () {
+          toast.className = toast.className.replace("show", "");
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
